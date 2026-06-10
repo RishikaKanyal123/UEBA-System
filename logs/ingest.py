@@ -277,7 +277,7 @@ def ingest_insiders(filepath):
     print(f"Ingesting: {filepath}")
     df = pd.read_csv(filepath)
     # Keep only r4.2 rows
-    df = df[df['dataset'].str.contains('r4.2', na=False)]
+    df = df[df['dataset'].astype(str).str.contains('4.2', na=False)]
 
     conn = get_connection()
     c = conn.cursor()
