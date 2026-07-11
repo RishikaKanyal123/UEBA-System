@@ -139,3 +139,12 @@ INSIDERS_COL_MAP = {
     "start":    "start_date",
     "end":      "end_date",
 }
+
+# ------------------------------------------------------------------
+# FILE PATHS — processed outputs
+# ------------------------------------------------------------------
+import os
+
+PROCESSED_DIR  = os.path.join("data", "processed")
+FEATURES_CSV   = os.path.join(PROCESSED_DIR, "user_daily_features.csv")
+BASELINES_CSV  = os.path.join(PROCESSED_DIR, "user_baselines.csv")

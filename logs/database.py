@@ -7,7 +7,9 @@
 import sqlite3
 import os
 
-DB_PATH = "data/ueba.db"
+# Anchor the path to the project root, regardless of where the script is run from
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "ueba.db")
 
 # ------------------------------------------------------------------
 def get_connection() -> sqlite3.Connection:
