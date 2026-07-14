@@ -12,11 +12,21 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "ueba.db")
 
 # ------------------------------------------------------------------
+# def get_connection() -> sqlite3.Connection:
+#     """Return a connection to the SQLite database (row_factory enabled)."""
+#     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+#     conn = sqlite3.connect(DB_PATH)
+#     conn.row_factory = sqlite3.Row   # rows behave like dicts
+#     return conn
+
+
 def get_connection() -> sqlite3.Connection:
     """Return a connection to the SQLite database (row_factory enabled)."""
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row   # rows behave like dicts
+    conn.execute('PRAGMA temp_store = MEMORY')
+    conn.execute('PRAGMA cache_size = -64000')
     return conn
 
 
@@ -152,6 +162,24 @@ def create_tables():
         )
     """)
     c.execute("CREATE INDEX IF NOT EXISTS idx_labels_user ON insider_labels (user_id)")
+
+
+    # ── 5.5 INGESTION LOG ───────────────────────────────────────────
+    # One row per ingestion run — enables incremental ingestion by
+    # letting the pipeline check whether a file was already processed.
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS ingestion_log (
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            source_file    TEXT NOT NULL,      -- e.g. "logon.csv"
+            rows_inserted  INTEGER DEFAULT 0,
+            rows_skipped   INTEGER DEFAULT 0,
+            status         TEXT,               -- SUCCESS / FAILED
+            started_at     TEXT,               -- ISO-8601
+            finished_at    TEXT                -- ISO-8601
+        )
+    """)
+    c.execute("CREATE INDEX IF NOT EXISTS idx_ingestion_file ON ingestion_log (source_file)")
+
 
     # ── 6. ALERTS ──────────────────────────────────────────────────
     # One row per alert raised by the rule / ML engine.

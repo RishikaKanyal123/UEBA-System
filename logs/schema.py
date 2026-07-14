@@ -143,8 +143,19 @@ INSIDERS_COL_MAP = {
 # ------------------------------------------------------------------
 # FILE PATHS — processed outputs
 # ------------------------------------------------------------------
+# import os
+
+# PROCESSED_DIR  = os.path.join("data", "processed")
+# FEATURES_CSV   = os.path.join(PROCESSED_DIR, "user_daily_features.csv")
+# BASELINES_CSV  = os.path.join(PROCESSED_DIR, "user_baselines.csv")
+
+# ------------------------------------------------------------------
+# FILE PATHS — processed outputs
+# ------------------------------------------------------------------
 import os
 
-PROCESSED_DIR  = os.path.join("data", "processed")
+PROJECT_ROOT   = os.path.dirname(os.path.abspath(__file__))
+PROCESSED_DIR  = os.path.join(PROJECT_ROOT, "..", "data", "processed")
 FEATURES_CSV   = os.path.join(PROCESSED_DIR, "user_daily_features.csv")
 BASELINES_CSV  = os.path.join(PROCESSED_DIR, "user_baselines.csv")
+RISK_SCORES_CSV = os.path.join(PROCESSED_DIR, "risk_scores.csv")
