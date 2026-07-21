@@ -192,6 +192,7 @@ def create_tables():
             severity      TEXT NOT NULL,             -- LOW / MEDIUM / HIGH / CRITICAL
             description   TEXT NOT NULL,
             event_id      TEXT,                      -- triggering event (FK → events)
+            risk_score    REAL DEFAULT 0.0,
             is_resolved   INTEGER DEFAULT 0
         )
     """)
